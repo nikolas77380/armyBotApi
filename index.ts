@@ -62,7 +62,7 @@ bot.on('message', (msg) => {
         chats.find(el => el.id === fromId).message = msg.text;
         bot.sendMessage(
             id,
-            `Дякуємо. інформація зафіксована! Слава Україні! Смерь Ворогам!`,
+            `Дякуємо! інформація зафіксована! Слава Україні! Смерть Ворогам!`,
         )
     } else {
         bot.sendMessage(
