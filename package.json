@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "start": "tsc && nodemon dist/index.js",
-    "start production": "tsc && pm2 start dist/index.js",
+    "start-production": "tsc && pm2 start dist/index.js",
     "lint": "eslint . --ext .ts"
   },
   "author": "MykolaKipniak",
