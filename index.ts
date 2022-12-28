@@ -35,7 +35,7 @@ bot.on('message', async (msg) => {
             id,
             `Привіт! Тут Ви можете надати інформацію про пробеми нв службі!`);
     } else if (text === '/message') { 
-        const countExistingMessages = getCountMessagesByUserName(username);
+        const countExistingMessages = await getCountMessagesByUserName(username);
         if (msg.from.is_bot || countExistingMessages >= 2){
             bot.sendMessage(
                 id,
