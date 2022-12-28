@@ -74,7 +74,7 @@ bot.on('message', async (msg) => {
         );
     } else if (msg.reply_to_message?.text === 'Опишіть будь ласка проблему') {
         chats.find(el => el.id === fromId).message = msg.text;
-        chats.find(el => el.id === fromId).username = username;
+        chats.find(el => el.id === fromId).username = username || fromId;
         bot.sendMessage(
             id,
             `Дякуємо! інформація зафіксована! Слава Україні! Смерть Ворогам!`,
