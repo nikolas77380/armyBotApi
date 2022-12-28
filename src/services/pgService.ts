@@ -15,7 +15,7 @@ export class pgService {
     }
     public async getMessages(search: string) {
         this.client.connect();
-        const text = `SELECT * FROM 'notifications' WHERE LOWER(duty_station) LIKE LOWER('%${search}%') OR LOWER(text) LIKE LOWER('%${search}%') OR LOWER(user_name) LIKE LOWER('%${search}%') ORDER BY created_on DESC`;
+        const text = `SELECT * FROM notifications WHERE LOWER(duty_station) LIKE LOWER('%${search}%') OR LOWER(text) LIKE LOWER('%${search}%') OR LOWER(user_name) LIKE LOWER('%${search}%') ORDER BY created_on DESC`;
         try {
             const response = await this.client.query(text);
             this.client.end();
@@ -28,7 +28,7 @@ export class pgService {
     }
     public async getCountMessagesByUserName(search: string) {
         this.client.connect();
-        const count = `SELECT COUNT(*) FROM 'notifications' WHERE LOWER(user_name) = LOWER('%${search}%')`;
+        const count = `SELECT COUNT(*) FROM notifications WHERE LOWER(user_name) = LOWER('%${search}%')`;
         try {
             const response = await this.client.query(count);
             this.client.end();
