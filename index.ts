@@ -99,7 +99,7 @@ app.listen(port, () => {
 });
 
 app.use(express.json());
-const allowedOrigins = ['http://localhost:3002'];
+const allowedOrigins = ['http://localhost', 'http://161.35.194.26'];
 app.use(cors({
   origin: function(origin, callback){
     if(!origin) return callback(null, true);
