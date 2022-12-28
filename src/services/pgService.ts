@@ -21,9 +21,24 @@ export class pgService {
             this.client.end();
             return response.rows;
             
-        }  catch (err) { console.log(err)}
+        }  catch (err) {
+             console.log(err) 
+             this.client.end();
+        }
     }
-
+    public async getCountMessagesByUserName(search: string) {
+        this.client.connect();
+        const count = `SELECT COUNT(*) FROM 'notifications' WHERE LOWER(user_name) = LOWER('%${search}%')`;
+        try {
+            const response = await this.client.query(count);
+            this.client.end();
+            return response.rows;
+            
+        }  catch (err) {
+             console.log(err) 
+             this.client.end();
+        }
+    }
     public async saveMessage(chat) {
         this.client.connect();
         const text = 'INSERT INTO notifications(duty_station, text, user_name) VALUES($1, $2 ,$3) RETURNING *';
@@ -34,6 +49,7 @@ export class pgService {
             this.client.end();
         }   catch (err) {
             console.log(err);
+            this.client.end();
         }
     }
 }

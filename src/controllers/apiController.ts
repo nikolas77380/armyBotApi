@@ -21,7 +21,15 @@ const getMessages = async (req, res) => {
         console.log(err);
     }
 }
-
+const getCountMessagesByUserName = async (search) => {
+    const pg = new pgService();
+    try {
+        const messagesCount = await pg.getCountMessagesByUserName(search);
+        return messagesCount;
+    } catch (err) {
+        console.log(err);
+    }
+}
 const login = async (req, res) => {
     const {login, password} = req.body;
     if (login === process.env.USER_LOGIN && password === process.env.USER_PASSWORD) {
@@ -45,4 +53,4 @@ const login = async (req, res) => {
               });
     }
 }
-export { getMessages, saveMessage, login };
+export { getMessages, saveMessage, login, getCountMessagesByUserName };

@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv'
 import TelegramBot from "node-telegram-bot-api";
 import express from 'express';
 import router from './src/routes';
-import { saveMessage } from './src/controllers/apiController';
+import { saveMessage, getCountMessagesByUserName } from './src/controllers/apiController';
 import cors from 'cors';
 dotenv.config();
 const TOKEN = process.env.TOKEN;
@@ -19,7 +19,6 @@ const chats = [];
 bot.setMyCommands(commands);
 
 bot.on('message', async (msg) => {
-    console.log(msg)
     const {id} = msg.chat;
     const text = msg.text;
     const {id: fromId, username, is_bot} = msg.from;
@@ -36,7 +35,8 @@ bot.on('message', async (msg) => {
             id,
             `Привіт! Тут Ви можете надати інформацію про пробеми нв службі!`);
     } else if (text === '/message') { 
-        if (msg.from.is_bot){
+        const countExistingMessages = getCountMessagesByUserName(username);
+        if (msg.from.is_bot || countExistingMessages >= 2){
             bot.sendMessage(
                 id,
                 `Ви не можете використовувати бота!`,
