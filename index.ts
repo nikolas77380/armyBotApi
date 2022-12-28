@@ -3,7 +3,7 @@ import TelegramBot from "node-telegram-bot-api";
 import express from 'express';
 import router from './src/routes';
 import { saveMessage } from './src/controllers/apiController';
-
+import cors from 'cors';
 dotenv.config();
 const TOKEN = process.env.TOKEN;
 const commands = [
@@ -19,15 +19,30 @@ const chats = [];
 bot.setMyCommands(commands);
 
 bot.on('message', async (msg) => {
+    console.log(msg)
     const {id} = msg.chat;
     const text = msg.text;
-    const {id: fromId} = msg.from;
+    const {id: fromId, username, is_bot} = msg.from;
 
     if (text === '/start') {
+        if (is_bot){
+            bot.sendMessage(
+                id,
+                `Ви не можете використовувати бота!`,
+            );
+            return;
+        }
         bot.sendMessage(
             id,
             `Привіт! Тут Ви можете надати інформацію про пробеми нв службі!`);
     } else if (text === '/message') { 
+        if (msg.from.is_bot){
+            bot.sendMessage(
+                id,
+                `Ви не можете використовувати бота!`,
+            );
+            return;
+        }
         const opts = {
             reply_markup: {
                 force_reply: true,
@@ -59,11 +74,14 @@ bot.on('message', async (msg) => {
         );
     } else if (msg.reply_to_message?.text === 'Опишіть будь ласка проблему') {
         chats.find(el => el.id === fromId).message = msg.text;
+        chats.find(el => el.id === fromId).username = username;
         bot.sendMessage(
             id,
             `Дякуємо! інформація зафіксована! Слава Україні! Смерть Ворогам!`,
         );
         saveMessage(chats.find(el => el.id === fromId));
+        const index = chats.findIndex(el => el.id === fromId);
+        chats.splice(index, 1);
     } else {
         bot.sendMessage(
             id,
@@ -81,4 +99,16 @@ app.listen(port, () => {
 });
 
 app.use(express.json());
+const allowedOrigins = ['http://localhost:3002'];
+app.use(cors({
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
+
+}));
 app.use('/', router)
