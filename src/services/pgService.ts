@@ -28,7 +28,7 @@ export class pgService {
     }
     public async getCountMessagesByUserName(search: string) {
         this.client.connect();
-        const count = `SELECT COUNT(*) FROM notifications WHERE user_name = '${search}')`;
+        const count = `SELECT COUNT(*) FROM notifications WHERE user_name = '${search}'`;
         try {
             const response = await this.client.query(count);
             this.client.end();
