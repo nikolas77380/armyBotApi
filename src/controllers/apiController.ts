@@ -25,7 +25,7 @@ const getCountMessagesByUserName = async (search) => {
     const pg = new pgService();
     try {
         const messagesCount = await pg.getCountMessagesByUserName(search);
-        return messagesCount;
+        return +messagesCount[0]?.count || 0;
     } catch (err) {
         console.log(err);
     }
