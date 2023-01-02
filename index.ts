@@ -9,7 +9,6 @@ const TOKEN = process.env.TOKEN;
 const commands = [
     {command: '/start', description: 'Розпочати роботу з ботом'},
     {command: '/message', description: 'Надати інформацію про проблему'},
-    {command: '/help', description: 'Help'},
 ]
 
 const bot = new TelegramBot(TOKEN, {polling: true});
@@ -23,20 +22,9 @@ bot.on('message', async (msg) => {
     const text = msg.text;
     const {id: fromId, username, is_bot} = msg.from;
 
-    if (text === '/start') {
-        if (is_bot){
-            bot.sendMessage(
-                id,
-                `Ви не можете використовувати бота!`,
-            );
-            return;
-        }
-        bot.sendMessage(
-            id,
-            `Привіт! Тут Ви можете надати інформацію про пробеми нв службі!`);
-    } else if (text === '/message') { 
+    if (text === '/start' || text === '/message') {
         const countExistingMessages = await getCountMessagesByUserName(username);
-        if (msg.from.is_bot || countExistingMessages >= 2){
+        if (is_bot || countExistingMessages >= 2){
             bot.sendMessage(
                 id,
                 `Ви не можете використовувати бота!`,
