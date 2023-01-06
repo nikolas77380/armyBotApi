@@ -20,10 +20,10 @@ bot.setMyCommands(commands);
 bot.on('message', async (msg) => {
     const {id} = msg.chat;
     const text = msg.text;
-    const {id: fromId, username, is_bot} = msg.from;
+    const {id: fromId, is_bot} = msg.from;
 
     if (text === '/start' || text === '/message') {
-        const countExistingMessages = await getCountMessagesByUserName(username);
+        const countExistingMessages = await getCountMessagesByUserName(fromId);
         if (is_bot || countExistingMessages >= 2){
             bot.sendMessage(
                 id,
@@ -36,13 +36,13 @@ bot.on('message', async (msg) => {
                 force_reply: true,
             }
         }
-        if (chats.find(el => el.id === fromId)) {
-            bot.sendMessage(
-                id,
-                `Ви вже надали інформацію, дякуємо!`,
-            );
-            return;
-        } 
+        // if (chats.find(el => el.id === fromId)) {
+        //     bot.sendMessage(
+        //         id,
+        //         `Ви вже надали інформацію, дякуємо!`,
+        //     );
+        //     return;
+        // } 
         bot.sendMessage(
             id,
             `Укажіть будь ласка з якої Ви бригади`,
@@ -62,7 +62,7 @@ bot.on('message', async (msg) => {
         );
     } else if (msg.reply_to_message?.text === 'Опишіть будь ласка проблему') {
         chats.find(el => el.id === fromId).message = msg.text;
-        chats.find(el => el.id === fromId).username = username || fromId;
+        chats.find(el => el.id === fromId).username = fromId;
         bot.sendMessage(
             id,
             `Дякуємо! інформація зафіксована! Слава Україні! Смерть Ворогам!`,
