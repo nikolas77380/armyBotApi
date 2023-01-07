@@ -24,7 +24,7 @@ bot.on('message', async (msg) => {
 
     if (text === '/start' || text === '/message') {
         const countExistingMessages = await getCountMessagesByUserName(fromId);
-        if (is_bot || countExistingMessages >= 2){
+        if (is_bot || countExistingMessages >= 6){
             bot.sendMessage(
                 id,
                 `Ви не можете використовувати бота!`,
